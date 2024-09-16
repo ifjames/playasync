@@ -1,35 +1,63 @@
-console.log("Hello ");
+console.log("Hello! Welcome!");
 
 setTimeout(() => {
-    console.log('Timer is done. ');
+    console.log('Wait time is over.');
 }, 2000);
 
-console.log('Hi');
+console.log("Processing your order...");
 
-console.log("Ordering your pizza...");
-
-const pizzaPromise = () => {
-   return new Promise ((resolve , reject) => {
-    let order = true;
-
-    if (order) {
-        setTimeout(() => {
-            resolve('After 5 seconds, Pizza delivered!');
-        }, 5000);
+const confirmOrder = () => {
+    return new Promise((resolve, reject) => {
+        let isConfirmed = true; 
 
         setTimeout(() => {
-            reject('After 5 seconds, Pizza not delivered!');
-        }, 5000);
-    }
-   });
+            if (isConfirmed) {
+                resolve('Your order has been confirmed!');
+            } else {
+                reject('Order confirmation failed.');
+            }
+        }, 1000);
+    });
 };
 
-pizzaPromise()
-    .then ((result) => {
-        console.log(result);
+const prepareOrder = () => {
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            resolve('After 3 seconds, your order is prepared!');
+        }, 3000);
+    });
+};
+
+const deliverOrder = () => {
+    return new Promise((resolve, reject) => {
+        let isDelivered = true;
+
+        if (isDelivered) {
+            setTimeout(() => {
+                resolve('After 5 seconds, your order has arrived!');
+            }, 5000);
+
+            setTimeout(() => {
+                reject('After 5 seconds, your order could not be delivered!');
+            }, 5000);
+        }
+    });
+};
+
+confirmOrder()
+    .then((confirmMessage) => {
+        console.log(confirmMessage);
+        return prepareOrder();
     })
-    .catch ((error) => {
+    .then((prepMessage) => {
+        console.log(prepMessage);
+        return deliverOrder();
+    })
+    .then((deliveryMessage) => {
+        console.log(deliveryMessage);
+    })
+    .catch((error) => {
         console.log(error);
     });
 
-console.log("Waiting for your pizza...")
+console.log("Awaiting your delivery...");
